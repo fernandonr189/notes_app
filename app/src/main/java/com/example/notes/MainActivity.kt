@@ -1,10 +1,12 @@
 package com.example.notes
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import com.example.notes.activities.MainScreen
 import com.google.android.material.textfield.TextInputEditText
 
 class MainActivity : AppCompatActivity() {
@@ -33,6 +35,8 @@ class MainActivity : AppCompatActivity() {
         loginButton.setOnClickListener {
             if(validateForm()){
                 Toast.makeText(this, "Inicio de sesion correcto", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, MainScreen::class.java)
+                startActivity(intent)
             }
             else {
                 Toast.makeText(this, "Por favor, llene los campos correctamente", Toast.LENGTH_SHORT).show()
