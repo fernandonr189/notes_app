@@ -11,8 +11,6 @@ import com.google.android.material.textfield.TextInputEditText
 
 class MainActivity : AppCompatActivity() {
 
-
-
     private lateinit var userTextField : TextInputEditText
     private lateinit var passwordTextField : TextInputEditText
     private lateinit var loginButton : Button

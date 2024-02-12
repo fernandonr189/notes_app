@@ -2,7 +2,6 @@ package com.example.notes.activities
 
 import android.os.Bundle
 import android.view.Menu
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -13,11 +12,13 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.example.notes.R
 import com.example.notes.databinding.ActivityMainScreenBinding
+import com.example.notes.models.FabClickCallback
 
 class MainScreen : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainScreenBinding
+    private lateinit var fabCallback : FabClickCallback
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,9 +28,10 @@ class MainScreen : AppCompatActivity() {
 
         setSupportActionBar(binding.appBarMainScreen.toolbar)
 
-        binding.appBarMainScreen.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+        binding.appBarMainScreen.fab.setOnClickListener {
+            if(this.fabCallback != null) {
+                this.fabCallback.onFabClick()
+            }
         }
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
@@ -49,6 +51,12 @@ class MainScreen : AppCompatActivity() {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main_screen, menu)
         return true
+    }
+
+    public fun handleFabClickListener(callback: FabClickCallback?) {
+        if (callback != null) {
+            this.fabCallback = callback
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {

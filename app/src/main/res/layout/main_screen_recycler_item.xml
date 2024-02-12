@@ -9,6 +9,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/md_theme_surfaceContainer"
         app:cardCornerRadius="12dp">
 
         <LinearLayout
@@ -22,14 +23,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="4dp"
+                android:textSize="24sp"
+                android:textColor="@color/md_theme_onBackground"
                 android:text="NoteTitle" />
 
             <TextView
                 android:id="@+id/note_content_preview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="4dp"
-                android:autoSizeTextType="none"
+                android:padding="8dp"
+                android:textColor="@color/md_theme_onBackground"
                 android:text="NoteContent" />
 
         </LinearLayout>
