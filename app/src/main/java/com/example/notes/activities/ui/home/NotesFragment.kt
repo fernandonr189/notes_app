@@ -77,7 +77,7 @@ class NotesFragment : Fragment(), FabClickCallback, ContextMenuCallback {
     }
 
     override fun onResume() {
-        recyclerAdapter.notifyItemInserted(State.notes.size)
+        recyclerAdapter.notifyDataSetChanged()
         if(notes.size > 0) {
             recycler.visibility = View.VISIBLE
             emptyNotice.visibility = View.INVISIBLE
@@ -94,7 +94,9 @@ class NotesFragment : Fragment(), FabClickCallback, ContextMenuCallback {
     override fun onLongClick(menuItem: MenuItem, position : Int) : Boolean {
         when(menuItem.itemId) {
             R.id.edit_menu_item -> {
-
+                val intent = Intent(requireContext(), AddNoteScreen::class.java)
+                intent.putExtra("NoteIndex", position)
+                startActivity(intent)
             }
             R.id.delete_menu_item -> {
                 State.notes.removeAt(position)
