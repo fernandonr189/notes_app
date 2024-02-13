@@ -1,13 +1,19 @@
 package com.example.notes
 
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import com.example.notes.activities.MainScreen
+import com.example.notes.models.Note
+import com.example.notes.models.State
 import com.google.android.material.textfield.TextInputEditText
+import java.time.Instant
+import java.util.Date
 
 class MainActivity : AppCompatActivity() {
 
@@ -16,6 +22,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var loginButton : Button
     private lateinit var exitButton: Button
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)

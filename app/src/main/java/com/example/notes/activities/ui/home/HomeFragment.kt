@@ -18,13 +18,13 @@ import com.example.notes.activities.adapters.MainScreenRecyclerAdapter
 import com.example.notes.databinding.FragmentHomeBinding
 import com.example.notes.models.FabClickCallback
 import com.example.notes.models.Note
+import com.example.notes.models.State
 
 class HomeFragment : Fragment(), FabClickCallback {
 
     private var _binding: FragmentHomeBinding? = null
     private lateinit var recycler : RecyclerView
     private lateinit var recyclerAdapter: MainScreenRecyclerAdapter
-    private var notes : MutableList<Note> = ArrayList()
     private lateinit var parentActivity : MainScreen
 
     // This property is only valid between onCreateView and
@@ -44,6 +44,8 @@ class HomeFragment : Fragment(), FabClickCallback {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        var state = State
+        var notes = state.notes
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -59,6 +61,11 @@ class HomeFragment : Fragment(), FabClickCallback {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onResume() {
+        recyclerAdapter.notifyItemInserted(State.notes.size)
+        super.onResume()
     }
 
     override fun onFabClick() {
