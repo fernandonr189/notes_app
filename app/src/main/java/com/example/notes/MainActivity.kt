@@ -1,5 +1,6 @@
 package com.example.notes
 
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -47,6 +48,11 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "Por favor, llene los campos correctamente", Toast.LENGTH_SHORT).show()
             }
         }
+
+        var sharedPref = this.getSharedPreferences("State", Context.MODE_PRIVATE)
+        var StateJson = sharedPref.getString("State", State.toJson())
+        State.fromJson(StateJson!!)
+        print("Hello")
     }
 
     private fun validateForm() : Boolean {

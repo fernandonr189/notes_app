@@ -1,5 +1,6 @@
 package com.example.notes.activities.ui.home
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -76,6 +77,7 @@ class NotesFragment : Fragment(), FabClickCallback, ContextMenuCallback {
         _binding = null
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onResume() {
         recyclerAdapter.notifyDataSetChanged()
         if(notes.size > 0) {

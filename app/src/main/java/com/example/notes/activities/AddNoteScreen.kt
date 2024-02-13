@@ -1,5 +1,6 @@
 package com.example.notes.activities
 
+import android.content.Context
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -11,6 +12,7 @@ import com.example.notes.R
 import com.example.notes.models.Note
 import com.example.notes.models.State
 import com.google.android.material.textfield.TextInputEditText
+import com.google.gson.Gson
 import java.time.Instant
 import java.util.Date
 
@@ -60,11 +62,18 @@ class AddNoteScreen : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun saveNote() {
         if(noteIndex == -1) {
-            State.notes.add(Note(noteBodyTitleEditText.text.toString(), noteTitleEditText.text.toString(), Date.from(Instant.now())))
+            State.addNote(Note(noteBodyTitleEditText.text.toString(), noteTitleEditText.text.toString(), Date.from(Instant.now())))
         }
         else {
             State.notes[noteIndex!!].title = noteTitleEditText.text.toString()
             State.notes[noteIndex!!].content = noteBodyTitleEditText.text.toString()
+        }
+
+        val json = State.toJson()
+        val sharedpref = this.getSharedPreferences("State", Context.MODE_PRIVATE)
+        with(sharedpref.edit()) {
+            putString("State", json)
+            apply()
         }
     }
 }
