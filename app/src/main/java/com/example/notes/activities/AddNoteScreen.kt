@@ -35,6 +35,7 @@ class AddNoteScreen : AppCompatActivity() {
         saveButton.setOnClickListener {
             if(validateForm()) {
                 saveNote()
+                finish()
             }
             else {
                 Toast.makeText(this, "Por favor escriba algo!", Toast.LENGTH_SHORT).show()

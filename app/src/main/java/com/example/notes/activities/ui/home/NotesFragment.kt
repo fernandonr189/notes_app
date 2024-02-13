@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,17 +15,19 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.notes.activities.AddNoteScreen
 import com.example.notes.activities.MainScreen
 import com.example.notes.activities.adapters.MainScreenRecyclerAdapter
-import com.example.notes.databinding.FragmentHomeBinding
+import com.example.notes.databinding.FragmentNotesBinding
 import com.example.notes.models.FabClickCallback
 import com.example.notes.models.Note
 import com.example.notes.models.State
 
-class HomeFragment : Fragment(), FabClickCallback {
+class NotesFragment : Fragment(), FabClickCallback {
 
-    private var _binding: FragmentHomeBinding? = null
+    private var _binding: FragmentNotesBinding? = null
     private lateinit var recycler : RecyclerView
     private lateinit var recyclerAdapter: MainScreenRecyclerAdapter
     private lateinit var parentActivity : MainScreen
+    private lateinit var emptyNotice : TextView
+    private lateinit var notes : ArrayList<Note>
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -45,15 +47,22 @@ class HomeFragment : Fragment(), FabClickCallback {
         savedInstanceState: Bundle?
     ): View {
         var state = State
-        var notes = state.notes
+        notes = state.notes
 
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        _binding = FragmentNotesBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        emptyNotice = _binding!!.emptyNotesNotice
         recycler = _binding!!.mainScreenRecycler
         recyclerAdapter = MainScreenRecyclerAdapter(notes, requireContext())
         recycler.adapter = recyclerAdapter
         recycler.layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
+
+        if(notes.size > 0) {
+            recycler.visibility = View.VISIBLE
+            emptyNotice.visibility = View.INVISIBLE
+        }
+
 
         return root
     }
@@ -65,6 +74,10 @@ class HomeFragment : Fragment(), FabClickCallback {
 
     override fun onResume() {
         recyclerAdapter.notifyItemInserted(State.notes.size)
+        if(notes.size > 0) {
+            recycler.visibility = View.VISIBLE
+            emptyNotice.visibility = View.INVISIBLE
+        }
         super.onResume()
     }
 
