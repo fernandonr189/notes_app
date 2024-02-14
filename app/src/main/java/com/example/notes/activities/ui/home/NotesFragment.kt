@@ -1,6 +1,7 @@
 package com.example.notes.activities.ui.home
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -9,7 +10,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -103,6 +103,12 @@ class NotesFragment : Fragment(), FabClickCallback, ContextMenuCallback {
             R.id.delete_menu_item -> {
                 State.notes.removeAt(position)
                 recyclerAdapter.notifyItemRemoved(position)
+                val json = State.toJson()
+                val sharedpref = requireActivity().getSharedPreferences("State", Context.MODE_PRIVATE)
+                with(sharedpref.edit()) {
+                    putString("State", json)
+                    apply()
+                }
             }
         }
         if(notes.size == 0) {
