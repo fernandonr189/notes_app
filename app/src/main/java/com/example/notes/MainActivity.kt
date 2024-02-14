@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.notes.activities.MainScreen
+import com.example.notes.models.Settings
 import com.example.notes.models.State
 import com.google.android.material.textfield.TextInputEditText
 
@@ -58,6 +59,11 @@ class MainActivity : AppCompatActivity() {
         var sharedPref = this.getSharedPreferences("State", Context.MODE_PRIVATE)
         var StateJson = sharedPref.getString("State", State.toJson())
         State.fromJson(StateJson!!)
+
+        var sharedPrefSettings = this.getSharedPreferences("Settings", Context.MODE_PRIVATE)
+        var SettingsJson = sharedPrefSettings.getString("Settings", Settings.toJson())
+        Settings.fromJson(SettingsJson!!)
+        print(Settings.params.fontSize)
 
         var sharedPrefLogin = this.getSharedPreferences("Login", Context.MODE_PRIVATE)
         var username = sharedPrefLogin.getString("User", "")

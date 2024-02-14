@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.notes.R
 import com.example.notes.models.ContextMenuCallback
 import com.example.notes.models.Note
+import com.example.notes.models.Settings
 
 class MainScreenRecyclerAdapter(notes: MutableList<Note>, context: Context, cMenu : ContextMenuCallback) :
     RecyclerView.Adapter<MainScreenRecyclerAdapter.ViewHolder>() {
@@ -17,18 +18,17 @@ class MainScreenRecyclerAdapter(notes: MutableList<Note>, context: Context, cMen
     private val _notes: MutableList<Note> = notes
     private val _context: Context = context
     private val _cMenu: ContextMenuCallback = cMenu
-    private var _textSize : Float = 12F
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val noteTitle = view.findViewById(R.id.note_title) as TextView
         private val noteContent = view.findViewById(R.id.note_content_preview) as TextView
 
-        fun bind(notes : Note, context: Context, textSize : Float) {
+        fun bind(notes : Note, context: Context) {
             noteTitle.text = notes.title
             noteContent.text = if (notes.content.length > 100) {
                 "${ notes.content.substring(0, 100)}..."
             } else notes.content
-            noteContent.textSize = textSize
+            noteContent.setTextSize(Settings.params.fontSize)
         }
     }
 
@@ -40,13 +40,9 @@ class MainScreenRecyclerAdapter(notes: MutableList<Note>, context: Context, cMen
         return ViewHolder(layoutInflater.inflate(R.layout.main_screen_recycler_item, parent, false))
     }
 
-    fun setContentFontSize(size : Float) {
-        this._textSize = size
-    }
-
     override fun onBindViewHolder(holder: MainScreenRecyclerAdapter.ViewHolder, position: Int) {
         val item = this._notes[position]
-        holder.bind(item, _context, _textSize)
+        holder.bind(item, _context)
         holder.itemView.setOnClickListener {
             val popup = PopupMenu(_context, holder.itemView)
             popup.inflate(R.menu.note_item_menu)
