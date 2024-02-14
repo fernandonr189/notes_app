@@ -24,9 +24,12 @@
             android:textSize="56sp"
             android:text="Bienvenido" />
 
-        <Space
+        <ImageView
+            android:id="@+id/imageView"
             android:layout_width="match_parent"
-            android:layout_height="196dp" />
+            android:layout_height="196dp"
+            android:layout_margin="16dp"
+            app:srcCompat="@drawable/logo_ceti" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -54,6 +57,12 @@
                 android:hint="Contraseña" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <CheckBox
+            android:id="@+id/remember_me_checkbox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Recordarme" />
+
         <Button
             android:id="@+id/login_button"
             android:layout_width="156dp"
@@ -69,5 +78,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="Salir" />
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

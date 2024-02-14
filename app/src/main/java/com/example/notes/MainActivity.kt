@@ -3,18 +3,15 @@ package com.example.notes
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
-import android.widget.TextView
+import android.widget.CheckBox
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import com.example.notes.activities.MainScreen
-import com.example.notes.models.Note
 import com.example.notes.models.State
 import com.google.android.material.textfield.TextInputEditText
-import java.time.Instant
-import java.util.Date
 
 class MainActivity : AppCompatActivity() {
 
@@ -22,6 +19,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var passwordTextField : TextInputEditText
     private lateinit var loginButton : Button
     private lateinit var exitButton: Button
+    private lateinit var rememberMeCheckbox : CheckBox
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,6 +32,8 @@ class MainActivity : AppCompatActivity() {
         loginButton = findViewById(R.id.login_button)
         exitButton = findViewById(R.id.exit_button)
 
+        rememberMeCheckbox = findViewById(R.id.remember_me_checkbox)
+
         exitButton.setOnClickListener {
             finish()
         }
@@ -41,6 +41,12 @@ class MainActivity : AppCompatActivity() {
         loginButton.setOnClickListener {
             if(validateForm()){
                 Toast.makeText(this, "Inicio de sesion correcto", Toast.LENGTH_SHORT).show()
+                if(rememberMeCheckbox.isChecked) {
+                    saveLoginData()
+                }
+                else {
+                    removeLoginData()
+                }
                 val intent = Intent(this, MainScreen::class.java)
                 startActivity(intent)
             }
@@ -52,7 +58,31 @@ class MainActivity : AppCompatActivity() {
         var sharedPref = this.getSharedPreferences("State", Context.MODE_PRIVATE)
         var StateJson = sharedPref.getString("State", State.toJson())
         State.fromJson(StateJson!!)
-        print("Hello")
+
+        var sharedPrefLogin = this.getSharedPreferences("Login", Context.MODE_PRIVATE)
+        var username = sharedPrefLogin.getString("User", "")
+        var password = sharedPrefLogin.getString("Password", "")
+
+        userTextField.setText(username)
+        passwordTextField.setText(password)
+    }
+
+    private fun removeLoginData() {
+        val sharedPref = this.getSharedPreferences("Login", Context.MODE_PRIVATE)
+        with(sharedPref.edit()) {
+            putString("User", "")
+            putString("Password", "")
+            apply()
+        }
+    }
+
+    private fun saveLoginData() {
+        val sharedPref = this.getSharedPreferences("Login", Context.MODE_PRIVATE)
+        with(sharedPref.edit()) {
+            putString("User", userTextField.text.toString())
+            putString("Password", passwordTextField.text.toString())
+            apply()
+        }
     }
 
     private fun validateForm() : Boolean {
