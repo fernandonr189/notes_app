@@ -25,6 +25,7 @@ import com.example.notes.databinding.FragmentNotesBinding
 import com.example.notes.models.ContextMenuCallback
 import com.example.notes.models.FabClickCallback
 import com.example.notes.models.Note
+import com.example.notes.models.Settings
 import com.example.notes.models.State
 
 class NotesFragment : Fragment(), FabClickCallback, ContextMenuCallback {
@@ -63,7 +64,14 @@ class NotesFragment : Fragment(), FabClickCallback, ContextMenuCallback {
         recycler = _binding!!.mainScreenRecycler
         recyclerAdapter = MainScreenRecyclerAdapter(notes, requireContext(), this)
         recycler.adapter = recyclerAdapter
-        recycler.layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
+
+        if(Settings.params.isGridActive) {
+
+            recycler.layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
+        }
+        else {
+            recycler.layoutManager = LinearLayoutManager(requireContext())
+        }
 
         if(notes.size > 0) {
             recycler.visibility = View.VISIBLE

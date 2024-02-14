@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import android.widget.Switch
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.notes.activities.MainScreen
@@ -19,11 +20,13 @@ class SettingsFragment : Fragment(), FabClickCallback {
 
     private var _binding: FragmentGalleryBinding? = null
     private lateinit var parentActivity : MainScreen
+    private lateinit var gridSwitch : Switch
 
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
     private var fontSize : Float = if(Settings.params.fontSize == 0F) 12F else Settings.params.fontSize
+    private val isGrid : Boolean = Settings.params.isGridActive
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -42,6 +45,18 @@ class SettingsFragment : Fragment(), FabClickCallback {
         val root: View = binding.root
 
         val spinner: Spinner = binding.fontSizeSpinner
+        gridSwitch = binding.gridSwitch
+
+        gridSwitch.isChecked = isGrid
+
+        gridSwitch.setOnClickListener {
+            if(gridSwitch.isChecked) {
+                changeGridState(true)
+            }
+            else {
+                changeGridState(false)
+            }
+        }
 
         val adapter = ArrayAdapter(
             requireContext(),
@@ -89,6 +104,16 @@ class SettingsFragment : Fragment(), FabClickCallback {
         }
 
         return root
+    }
+
+    private fun changeGridState(state: Boolean) {
+        Settings.params.isGridActive = state
+        val json = Settings.toJson()
+        val sharedpref = requireActivity().getSharedPreferences("Settings", Context.MODE_PRIVATE)
+        with(sharedpref.edit()) {
+            putString("Settings", json)
+            apply()
+        }
     }
 
     private fun saveFontSizeSettings(size : Float) {

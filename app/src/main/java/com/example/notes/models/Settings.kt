@@ -4,7 +4,7 @@ import com.google.gson.Gson
 import java.io.Serializable
 
 object Settings : Serializable{
-    var params : Params = Params(0F)
+    var params : Params = Params(0F, true)
 
     fun toJson(): String {
         return Gson().toJson(params)
