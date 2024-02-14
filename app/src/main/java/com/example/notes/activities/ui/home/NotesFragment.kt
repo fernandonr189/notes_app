@@ -1,6 +1,7 @@
 package com.example.notes.activities.ui.home
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -10,6 +11,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -92,6 +94,39 @@ class NotesFragment : Fragment(), FabClickCallback, ContextMenuCallback {
         startActivity(intent)
     }
 
+    fun showAlertDialog(position : Int) {
+        val dialog = AlertDialog.Builder(requireContext())
+            .setTitle("Advertencia")
+            .setMessage("¿Está seguro de que desea eliminar esta nota?")
+            .setNegativeButton("Cancelar") { view, _ ->
+                Toast.makeText(requireContext(), "Accion cancelada", Toast.LENGTH_SHORT).show()
+                view.dismiss()
+            }
+            .setPositiveButton("Aceptar") { view, _ ->
+                deleteNote(position)
+                if(notes.size == 0) {
+                    recycler.visibility = View.INVISIBLE
+                    emptyNotice.visibility = View.VISIBLE
+                }
+                Toast.makeText(requireContext(), "Eliminado", Toast.LENGTH_SHORT).show()
+                view.dismiss()
+            }
+            .setCancelable(false)
+            .create()
+        dialog.show()
+    }
+
+    private fun deleteNote(position: Int) {
+        State.notes.removeAt(position)
+        recyclerAdapter.notifyItemRemoved(position)
+        val json = State.toJson()
+        val sharedpref = requireActivity().getSharedPreferences("State", Context.MODE_PRIVATE)
+        with(sharedpref.edit()) {
+            putString("State", json)
+            apply()
+        }
+    }
+
 
     override fun onLongClick(menuItem: MenuItem, position : Int) : Boolean {
         when(menuItem.itemId) {
@@ -101,19 +136,8 @@ class NotesFragment : Fragment(), FabClickCallback, ContextMenuCallback {
                 startActivity(intent)
             }
             R.id.delete_menu_item -> {
-                State.notes.removeAt(position)
-                recyclerAdapter.notifyItemRemoved(position)
-                val json = State.toJson()
-                val sharedpref = requireActivity().getSharedPreferences("State", Context.MODE_PRIVATE)
-                with(sharedpref.edit()) {
-                    putString("State", json)
-                    apply()
-                }
+                showAlertDialog(position)
             }
-        }
-        if(notes.size == 0) {
-            recycler.visibility = View.INVISIBLE
-            emptyNotice.visibility = View.VISIBLE
         }
         return true
     }
